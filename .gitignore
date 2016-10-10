@@ -25,3 +25,5 @@ nbdist/
 Würde .mvn/ löschen
 Würde src/main/resources/ löschen
 Würde src/test/ löschen
+Würde src/main/resources/static/ löschen
+Würde src/main/resources/templates/ löschen
