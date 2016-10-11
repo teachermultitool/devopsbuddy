@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <ThresholdFilter level="ALL" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{ISO8601}; %-5p [%c{4}]: %m%n"/>
+        </Console>
+
+        <RollingFile name="appAllLog" fileName="log/all.log" filePattern="log/all-%d{yyyy-MM-dd}.%i.log"
+                     append="true">
+            <ThresholdFilter level="ALL" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{ISO8601}; %-5p [%c{4}]: %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30">
+
+                <Delete basePath="log">
+                    <IfFileName glob="all-*.log">
+                        <IfAccumulatedFileCount exceeds="30"/>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <RollingFile name="appErrorLog" fileName="log/error.log" filePattern="log/error-%d{yyyy-MM-dd}.%i.log"
+                     append="true">
+            <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{ISO8601}; %-5p [%c{4}]: %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+            <DefaultRolloverStrategy max="50">
+                <Delete basePath="log">
+                    <IfFileName glob="error-*.log">
+                        <IfAccumulatedFileCount exceeds="50"/>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="ALL">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="appAllLog"/>
+            <AppenderRef ref="appErrorLog"/>
+        </Root>
+
+        <Logger name="httpclient.wire" level="WARN">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="appAllLog"/>
+        </Logger>
+
+        <Logger name="org.apache.commons" level="WARN">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="appAllLog"/>
+        </Logger>
+
+        <Logger name="org.apache.http" level="WARN">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="appAllLog"/>
+        </Logger>
+
+        <Logger name="org.apache.http.impl.conn.PoolingHttpClientConnectionManager" level="WARN">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="appAllLog"/>
+        </Logger>
+
+        <Logger name="httpclient.wire" level="WARN">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="appAllLog"/>
+        </Logger>
+
+        <Logger name="org.hibernate" level="WARN">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="appAllLog"/>
+        </Logger>
+
+        <Logger name="org.springframework" level="WARN" additivity="false">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="appAllLog"/>
+        </Logger>
+    </Loggers>
+</Configuration>
+
