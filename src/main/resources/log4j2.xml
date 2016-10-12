@@ -46,6 +46,12 @@
             <AppenderRef ref="appErrorLog"/>
         </Root>
 
+        <Logger name="org.thymeleaf" level="INFO">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="appAllLog"/>
+        </Logger>
+
+
         <Logger name="httpclient.wire" level="WARN">
             <AppenderRef ref="console"/>
             <AppenderRef ref="appAllLog"/>

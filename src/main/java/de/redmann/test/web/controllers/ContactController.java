@@ -1,11 +1,13 @@
 package de.redmann.test.web.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import de.redmann.test.backend.service.EmailService;
 import de.redmann.test.web.domain.frontend.FeedbackPojo;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,6 +20,16 @@ public class ContactController
 {
 	private static final String	CONTACT_US_VIEW_NAME	= "contact/contact";
 	private static final String	FEEDBACK_MODEL_KEY		= "feedback";
+	
+	private final EmailService	emailService;
+	
+	
+	
+	@Autowired
+	public ContactController(EmailService emailService)
+	{
+		this.emailService = emailService;
+	}
 	
 	
 	
@@ -35,6 +47,7 @@ public class ContactController
 	public String contactPost(@ModelAttribute (FEEDBACK_MODEL_KEY) FeedbackPojo feedbackPojo)
 	{
 		log.debug("Feedback POJO content: " + feedbackPojo.toString());
+		emailService.sendFeedbackEmail(feedbackPojo);
 		return ContactController.CONTACT_US_VIEW_NAME;
 	}
 }
