@@ -16,6 +16,7 @@ import de.redmann.test.backend.service.SmtpEmailService;
 @PropertySource ("file:///${user.home}/.devopsbuddy/application-prod.properties")
 public class ProductionConfig
 {
+	
 	@Bean
 	public EmailService emailService()
 	{
