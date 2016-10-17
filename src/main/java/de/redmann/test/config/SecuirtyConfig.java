@@ -1,19 +1,29 @@
 package de.redmann.test.config;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by redmann on 13.10.16.
  */
 @Configuration
 @EnableWebSecurity
+@Slf4j
 public class SecuirtyConfig extends WebSecurityConfigurerAdapter
 {
+	
+	@Autowired
+	private Environment				env;
 	//@formatter:off
     public static final String[] PUBLIC_MATCHERS = {
             "/webjars/**",
@@ -24,6 +34,8 @@ public class SecuirtyConfig extends WebSecurityConfigurerAdapter
             "/about/**",
             "/contact/**",
             "/error/**/*",
+            "/console/**",
+            "/actuator/**"
     };
     //@formatter:on
 	
@@ -32,6 +44,14 @@ public class SecuirtyConfig extends WebSecurityConfigurerAdapter
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception
 	{
+		List<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
+		
+		if (activeProfiles.contains("dev"))
+		{
+			log.info("dev mode");
+			httpSecurity.csrf().disable();
+			httpSecurity.headers().frameOptions().disable();
+		}
 		//@formatter:off
         httpSecurity
                 .authorizeRequests()
