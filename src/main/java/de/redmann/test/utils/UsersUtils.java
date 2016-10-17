@@ -14,19 +14,19 @@ public class UsersUtils
 	
 	
 	
-	public static User createBasisUser()
+	public static User createBasisUser(String username, String email)
 	{
-        final User user = new User();
-        user.setUsername("basicUser");
-        user.setPassword("secret");
-        user.setEmail("me@example.com");
-        user.setFirstName("firstName");
-        user.setLastName("lastName");
-        user.setPhoneNumber("123456789123");
-        user.setCountry("DE");
-        user.setEnabled(true);
-        user.setDescription("A basic user");
-        user.setProfileImageUrl("https://blabla.images.com/basicuser");
-        return user;
+		final User user = new User();
+		user.setUsername(username);
+		user.setPassword("secret");
+		user.setEmail(email);
+		user.setFirstName("firstName");
+		user.setLastName("lastName");
+		user.setPhoneNumber("123456789123");
+		user.setCountry("DE");
+		user.setEnabled(true);
+		user.setDescription("A basic user");
+		user.setProfileImageUrl("https://blabla.images.com/basicuser");
+		return user;
 	}
 }

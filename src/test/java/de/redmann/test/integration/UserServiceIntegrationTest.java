@@ -4,7 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,15 +30,21 @@ public class UserServiceIntegrationTest
 {
 	
 	@Autowired
-	private UserService userService;
+	private UserService	userService;
+	
+	@Rule
+	public TestName		testName	= new TestName();
 	
 	
 	
 	@Test
 	public void testCreatUser()
 	{
+		
+		String username = testName.getMethodName();
+		String email = testName.getMethodName() + "@devopsbuddy.com";
 		Set<UserRole> userRoleSet = new HashSet<>();
-		User basicUser = UsersUtils.createBasisUser();
+		User basicUser = UsersUtils.createBasisUser(username, email);
 		
 		userRoleSet.add(new UserRole(basicUser, new Role(RolesEnum.BASIC)));
 		

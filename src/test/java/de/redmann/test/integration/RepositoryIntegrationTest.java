@@ -5,7 +5,9 @@ import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,6 +41,9 @@ public class RepositoryIntegrationTest
 	
 	@Autowired
 	private UserRepository	userRepository;
+	
+	@Rule
+	public TestName			testName	= new TestName();
 	
 	
 	
@@ -77,7 +82,9 @@ public class RepositoryIntegrationTest
 	@Test
 	public void testCreateNewUser() throws Exception
 	{
-		User basicUser = createUser();
+		String username = testName.getMethodName();
+		String email = testName.getMethodName() + "@devopsbuddy.com";
+		User basicUser = createUser(username, email);
 		
 		basicUser = userRepository.save(basicUser);
 		User newlyCreatedUser = userRepository.findOne(basicUser.getId());
@@ -99,18 +106,21 @@ public class RepositoryIntegrationTest
 	@Test
 	public void testDeleteUser()
 	{
-		User user = createUser();
+		
+		String username = testName.getMethodName();
+		String email = testName.getMethodName() + "@devopsbuddy.com";
+		User user = createUser(username, email);
 		userRepository.delete(user.getId());
 	}
 	
 	
 	
-	private User createUser()
+	private User createUser(String username, String email)
 	{
 		Plan basicPlan = createBasicPlan(PlansEnum.BASIC);
 		planRepository.save(basicPlan);
 		
-		User basicUser = UsersUtils.createBasisUser();
+		User basicUser = UsersUtils.createBasisUser(username, email);
 		basicUser.setPlan(basicPlan);
 		
 		Role basicRole = createBasicRole(RolesEnum.BASIC);

@@ -37,13 +37,13 @@ public class Main implements CommandLineRunner
 	public void run(String... args) throws Exception
 	{
 		Set<UserRole> userRoleSet = new HashSet<>();
-		User basicUser = UsersUtils.createBasisUser();
-
+		User basicUser = UsersUtils.createBasisUser("proUser", "proUser@devopsbuddy.com");
+		
 		userRoleSet.add(new UserRole(basicUser, new Role(RolesEnum.BASIC)));
-
+		
 		log.debug("Creating user with username: " + basicUser.getUsername());
 		userService.createUser(basicUser, PlansEnum.PRO, userRoleSet);
-
+		
 		log.debug("User {} created", basicUser.getUsername());
 	}
 }

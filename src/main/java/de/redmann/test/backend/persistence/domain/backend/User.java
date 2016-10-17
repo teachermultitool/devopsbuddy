@@ -28,9 +28,11 @@ public class User implements Serializable, UserDetails
 	@GeneratedValue (strategy = GenerationType.AUTO)
 	private long			id;
 	
+	@Column (unique = true)
 	private String			username;
 	
 	private String			password;
+	@Column (unique = true)
 	private String			email;
 	
 	private String			firstName;
@@ -44,7 +46,7 @@ public class User implements Serializable, UserDetails
 	
 	private String			profileImageUrl;
 	
-	private String			stripeCustimerId;
+	private String			stripeCustomerId;
 	
 	private boolean			enabled;
 	
