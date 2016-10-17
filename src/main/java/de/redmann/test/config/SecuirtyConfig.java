@@ -1,15 +1,18 @@
 package de.redmann.test.config;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import de.redmann.test.backend.service.UserSecurityService;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +44,7 @@ public class SecuirtyConfig extends WebSecurityConfigurerAdapter
     };
     //@formatter:on
 	
-	
+	private static final String SALT = "kamsdaspüdfjiwsawelw#awp";
 	
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception
@@ -74,7 +77,15 @@ public class SecuirtyConfig extends WebSecurityConfigurerAdapter
 	{
 		//@formatter:off
 		auth
-                .userDetailsService(userSecurityService);
+                .userDetailsService(userSecurityService).passwordEncoder(passwordEncoder());
         //@formatter:on
+	}
+	
+	
+	
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder()
+	{
+		return new BCryptPasswordEncoder(12, new SecureRandom(SALT.getBytes()));
 	}
 }

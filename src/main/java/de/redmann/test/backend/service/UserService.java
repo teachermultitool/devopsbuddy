@@ -3,6 +3,7 @@ package de.redmann.test.backend.service;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,17 +23,22 @@ import de.redmann.test.enums.PlansEnum;
 public class UserService
 {
 	@Autowired
-	private RoleRepository	roleRepository;
+	private RoleRepository			roleRepository;
 	@Autowired
-	private PlanRepository	planRepository;
+	private PlanRepository			planRepository;
 	@Autowired
-	private UserRepository	userRepository;
+	private UserRepository			userRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder	passwordEncoder;
 	
 	
 	
 	@Transactional
 	public User createUser(User user, PlansEnum plansEnum, Set<UserRole> userRoleSet)
 	{
+		String encrpytedPassword = passwordEncoder.encode(user.getPassword());
+		user.setPassword(encrpytedPassword);
 		Plan plan = planRepository.findOne(plansEnum.getId());
 		if (plan == null)
 		{
