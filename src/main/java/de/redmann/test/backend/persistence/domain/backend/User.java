@@ -1,12 +1,15 @@
 package de.redmann.test.backend.persistence.domain.backend;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode (of = "id")
-public class User implements Serializable
+public class User implements Serializable, UserDetails
 {
 	@Id
 	@GeneratedValue (strategy = GenerationType.AUTO)
@@ -51,4 +54,38 @@ public class User implements Serializable
 	@ManyToOne (fetch = FetchType.EAGER)
 	@JoinColumn (name = "plan_id")
 	private Plan			plan;
+	
+	
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities()
+	{
+		final Set<GrantedAuthority> authorities = new HashSet<>();
+		userRoles.forEach(userRole -> authorities.add(new Authority(userRole.getRole().getName())));
+		return authorities;
+	}
+	
+	
+	
+	@Override
+	public boolean isAccountNonExpired()
+	{
+		return true;
+	}
+	
+	
+	
+	@Override
+	public boolean isAccountNonLocked()
+	{
+		return true;
+	}
+	
+	
+	
+	@Override
+	public boolean isCredentialsNonExpired()
+	{
+		return true;
+	}
 }

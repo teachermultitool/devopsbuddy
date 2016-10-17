@@ -15,15 +15,18 @@ import lombok.NoArgsConstructor;
 @Table (name = "user_role")
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode (of = "id")
 public class UserRole implements Serializable
 {
+	
 	@Id
+	@GeneratedValue (strategy = GenerationType.AUTO)
+	private long	id;
+	
 	@ManyToOne (fetch = FetchType.EAGER)
 	@JoinColumn (name = "user_id")
 	private User	user;
 	
-	@Id
 	@ManyToOne (fetch = FetchType.EAGER)
 	@JoinColumn (name = "role_id")
 	private Role	role;
@@ -35,4 +38,5 @@ public class UserRole implements Serializable
 		this.user = basicUser;
 		this.role = basicRole;
 	}
+	
 }

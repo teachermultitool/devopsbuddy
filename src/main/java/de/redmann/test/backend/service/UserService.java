@@ -18,7 +18,7 @@ import de.redmann.test.enums.PlansEnum;
  * Created by redmann on 17.10.16.
  */
 @Service
-//@Transactional (readOnly = true)
+@Transactional (readOnly = true)
 public class UserService
 {
 	@Autowired
@@ -30,7 +30,7 @@ public class UserService
 	
 	
 	
-//	@Transactional
+	@Transactional
 	public User createUser(User user, PlansEnum plansEnum, Set<UserRole> userRoleSet)
 	{
 		Plan plan = planRepository.findOne(plansEnum.getId());

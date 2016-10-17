@@ -24,7 +24,6 @@ public class Plan implements Serializable
 	
 	@Id
 	@GeneratedValue (strategy = GenerationType.AUTO)
-	
 	private long	id;
 	
 	private String	name;

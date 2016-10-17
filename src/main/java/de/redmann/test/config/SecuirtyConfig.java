@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import de.redmann.test.backend.service.UserSecurityService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -21,7 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SecuirtyConfig extends WebSecurityConfigurerAdapter
 {
-	
+	@Autowired
+	private UserSecurityService		userSecurityService;
 	@Autowired
 	private Environment				env;
 	//@formatter:off
@@ -72,8 +74,7 @@ public class SecuirtyConfig extends WebSecurityConfigurerAdapter
 	{
 		//@formatter:off
 		auth
-                .inMemoryAuthentication()
-                    .withUser("user").password("password").roles("USER");
+                .userDetailsService(userSecurityService);
         //@formatter:on
 	}
 }
