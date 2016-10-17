@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import de.redmann.test.enums.RolesEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -26,4 +27,12 @@ public class Role implements Serializable
 	
 	@OneToMany (mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<UserRole>	userRoles	= new HashSet<>();
+	
+	
+	
+	public Role(RolesEnum rolesEnum)
+	{
+		this.id = rolesEnum.getId();
+		this.name = rolesEnum.getRoleName();
+	}
 }

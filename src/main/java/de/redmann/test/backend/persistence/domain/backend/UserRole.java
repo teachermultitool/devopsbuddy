@@ -27,4 +27,12 @@ public class UserRole implements Serializable
 	@ManyToOne (fetch = FetchType.EAGER)
 	@JoinColumn (name = "role_id")
 	private Role	role;
+	
+	
+	
+	public UserRole(final User basicUser, final Role basicRole)
+	{
+		this.user = basicUser;
+		this.role = basicRole;
+	}
 }

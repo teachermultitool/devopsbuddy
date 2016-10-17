@@ -1,13 +1,16 @@
-package de.redmann.test;
+package de.redmann.test.integration;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import de.redmann.test.Main;
 import de.redmann.test.backend.persistence.domain.backend.Role;
 import de.redmann.test.backend.persistence.domain.backend.User;
 import de.redmann.test.backend.persistence.domain.backend.UserRole;
@@ -15,35 +18,30 @@ import de.redmann.test.backend.service.UserService;
 import de.redmann.test.enums.PlansEnum;
 import de.redmann.test.enums.RolesEnum;
 import de.redmann.test.utils.UsersUtils;
-import lombok.extern.slf4j.Slf4j;
 
-@SpringBootApplication
-@Slf4j
-public class Main implements CommandLineRunner
+/**
+ * Created by redmann on 17.10.16.
+ */
+@RunWith (SpringJUnit4ClassRunner.class)
+@SpringBootTest (classes = Main.class)
+public class UserServiceIntegrationTest
 {
+	
 	@Autowired
 	private UserService userService;
 	
 	
 	
-	public static void main(String[] args)
-	{
-		SpringApplication.run(Main.class, args);
-	}
-	
-	
-	
-	@Override
-	public void run(String... args) throws Exception
+	@Test
+	public void testCreatUser()
 	{
 		Set<UserRole> userRoleSet = new HashSet<>();
 		User basicUser = UsersUtils.createBasisUser();
-
+		
 		userRoleSet.add(new UserRole(basicUser, new Role(RolesEnum.BASIC)));
-
-		log.debug("Creating user with username: " + basicUser.getUsername());
-		userService.createUser(basicUser, PlansEnum.PRO, userRoleSet);
-
-		log.debug("User {} created", basicUser.getUsername());
+		
+		User user = userService.createUser(basicUser, PlansEnum.BASIC, userRoleSet);
+		Assert.assertNotNull(user);
+		Assert.assertNotNull(user.getId());
 	}
 }

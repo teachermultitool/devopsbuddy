@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import de.redmann.test.enums.PlansEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -27,4 +28,12 @@ public class Plan implements Serializable
 	private long	id;
 	
 	private String	name;
+	
+	
+	
+	public Plan(PlansEnum plansEnum)
+	{
+		this.id = plansEnum.getId();
+		this.name = plansEnum.getPlanName();
+	}
 }
