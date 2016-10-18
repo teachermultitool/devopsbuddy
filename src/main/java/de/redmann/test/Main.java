@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,6 +24,13 @@ public class Main implements CommandLineRunner
 {
 	@Autowired
 	private UserService userService;
+
+    @Value("${webmaster.username}")
+    private String webmasterUsername;
+    @Value("${webmaster.password}")
+    private String webmasterPassword;
+    @Value("${webmaster.email}")
+    private String webmasterEmail;
 	
 	
 	
@@ -37,9 +45,9 @@ public class Main implements CommandLineRunner
 	public void run(String... args) throws Exception
 	{
 		Set<UserRole> userRoleSet = new HashSet<>();
-		User basicUser = UsersUtils.createBasisUser("proUser", "proUser@devopsbuddy.com");
-		
-		userRoleSet.add(new UserRole(basicUser, new Role(RolesEnum.BASIC)));
+		User basicUser = UsersUtils.createBasisUser(webmasterUsername, webmasterEmail);
+		basicUser.setPassword(webmasterPassword);
+		userRoleSet.add(new UserRole(basicUser, new Role(RolesEnum.ADMIN)));
 		
 		log.debug("Creating user with username: " + basicUser.getUsername());
 		userService.createUser(basicUser, PlansEnum.PRO, userRoleSet);
