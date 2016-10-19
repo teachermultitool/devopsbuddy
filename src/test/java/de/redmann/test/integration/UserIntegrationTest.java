@@ -1,6 +1,5 @@
 package de.redmann.test.integration;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -9,7 +8,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -18,32 +16,19 @@ import de.redmann.test.backend.persistence.domain.backend.Plan;
 import de.redmann.test.backend.persistence.domain.backend.Role;
 import de.redmann.test.backend.persistence.domain.backend.User;
 import de.redmann.test.backend.persistence.domain.backend.UserRole;
-import de.redmann.test.backend.persistence.repositories.PlanRepository;
-import de.redmann.test.backend.persistence.repositories.RoleRepository;
-import de.redmann.test.backend.persistence.repositories.UserRepository;
 import de.redmann.test.enums.PlansEnum;
 import de.redmann.test.enums.RolesEnum;
-import de.redmann.test.utils.UsersUtils;
 
 /**
  * Created by redmann on 14.10.16.
  */
 @RunWith (SpringJUnit4ClassRunner.class)
 @SpringBootTest (classes = Main.class)
-public class RepositoryIntegrationTest
+public class UserIntegrationTest extends AbstractIntegrationTest
 {
 	
-	@Autowired
-	private PlanRepository	planRepository;
-	
-	@Autowired
-	private RoleRepository	roleRepository;
-	
-	@Autowired
-	private UserRepository	userRepository;
-	
 	@Rule
-	public TestName			testName	= new TestName();
+	public TestName testName = new TestName();
 	
 	
 	
@@ -82,9 +67,7 @@ public class RepositoryIntegrationTest
 	@Test
 	public void testCreateNewUser() throws Exception
 	{
-		String username = testName.getMethodName();
-		String email = testName.getMethodName() + "@devopsbuddy.com";
-		User basicUser = createUser(username, email);
+		User basicUser = createUser(testName);
 		
 		basicUser = userRepository.save(basicUser);
 		User newlyCreatedUser = userRepository.findOne(basicUser.getId());
@@ -107,45 +90,8 @@ public class RepositoryIntegrationTest
 	public void testDeleteUser()
 	{
 		
-		String username = testName.getMethodName();
-		String email = testName.getMethodName() + "@devopsbuddy.com";
-		User user = createUser(username, email);
-		userRepository.delete(user.getId());
-	}
-	
-	
-	
-	private User createUser(String username, String email)
-	{
-		Plan basicPlan = createBasicPlan(PlansEnum.BASIC);
-		planRepository.save(basicPlan);
-		
-		User basicUser = UsersUtils.createBasisUser(username, email);
-		basicUser.setPlan(basicPlan);
-		
-		Role basicRole = createBasicRole(RolesEnum.BASIC);
-		roleRepository.save(basicRole);
-		
-		Set<UserRole> userRoleSet = new HashSet<>();
-		UserRole userRole = new UserRole(basicUser, basicRole);
-		userRoleSet.add(userRole);
-		
-		basicUser.getUserRoles().addAll(userRoleSet);
-		return userRepository.save(basicUser);
-	}
-	
-	
-	
-	private Plan createBasicPlan(PlansEnum plansEnum)
-	{
-		return new Plan(plansEnum);
-	}
-	
-	
-	
-	private Role createBasicRole(RolesEnum rolesEnum)
-	{
-		return new Role(rolesEnum);
+		User basicUser = createUser(testName);
+		userRepository.delete(basicUser.getId());
 	}
 	
 }

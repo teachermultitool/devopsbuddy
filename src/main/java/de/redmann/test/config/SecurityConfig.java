@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @EnableWebSecurity
 @Slf4j
-public class SecuirtyConfig extends WebSecurityConfigurerAdapter
+public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
 	@Autowired
 	private UserSecurityService		userSecurityService;

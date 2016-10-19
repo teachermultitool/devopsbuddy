@@ -26,36 +26,39 @@ public class User implements Serializable, UserDetails
 {
 	@Id
 	@GeneratedValue (strategy = GenerationType.AUTO)
-	private long			id;
+	private long					id;
 	
 	@Column (unique = true)
-	private String			username;
+	private String					username;
 	
-	private String			password;
+	private String					password;
 	@Column (unique = true)
-	private String			email;
+	private String					email;
 	
-	private String			firstName;
-	private String			lastName;
-	private String			phoneNumber;
+	private String					firstName;
+	private String					lastName;
+	private String					phoneNumber;
 	
 	@Length (max = 500)
-	private String			description;
+	private String					description;
 	
-	private String			country;
+	private String					country;
 	
-	private String			profileImageUrl;
+	private String					profileImageUrl;
 	
-	private String			stripeCustomerId;
+	private String					stripeCustomerId;
 	
-	private boolean			enabled;
+	private boolean					enabled;
 	
 	@OneToMany (mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<UserRole>	userRoles	= new HashSet<>();
+	private Set<UserRole>			userRoles			= new HashSet<>();
+	
+	@OneToMany (mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<PasswordResetToken>	passwordResetTokens	= new HashSet<>();
 	
 	@ManyToOne (fetch = FetchType.EAGER)
 	@JoinColumn (name = "plan_id")
-	private Plan			plan;
+	private Plan					plan;
 	
 	
 	
