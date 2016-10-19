@@ -1,6 +1,7 @@
 package de.redmann.test.integration;
 
 import java.util.Set;
+import java.util.UUID;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,7 +25,7 @@ import de.redmann.test.enums.RolesEnum;
  */
 @RunWith (SpringJUnit4ClassRunner.class)
 @SpringBootTest (classes = Main.class)
-public class UserIntegrationTest extends AbstractIntegrationTest
+public class UserRepositoryIntegrationTest extends AbstractIntegrationTest
 {
 	
 	@Rule
@@ -89,9 +90,34 @@ public class UserIntegrationTest extends AbstractIntegrationTest
 	@Test
 	public void testDeleteUser()
 	{
-		
 		User basicUser = createUser(testName);
 		userRepository.delete(basicUser.getId());
 	}
 	
+	
+	
+	@Test
+	public void testGetUserByEmail()
+	{
+		User basicUser = createUser(testName);
+		User byEmail = userRepository.findByEmail(basicUser.getEmail());
+		
+		Assert.assertNotNull(byEmail);
+		Assert.assertNotNull(byEmail.getId());
+	}
+	
+	
+	
+	@Test
+	public void testUpdateUserPassword()
+	{
+		User user = createUser(testName);
+		String newPassword = UUID.randomUUID().toString();
+		
+		userRepository.updateUserPassword(user.getId(), newPassword);
+		
+		user = userRepository.findOne(user.getId());
+		
+		Assert.assertEquals(newPassword, user.getPassword());
+	}
 }

@@ -14,12 +14,14 @@ import de.redmann.test.backend.persistence.repositories.PlanRepository;
 import de.redmann.test.backend.persistence.repositories.RoleRepository;
 import de.redmann.test.backend.persistence.repositories.UserRepository;
 import de.redmann.test.enums.PlansEnum;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by redmann on 17.10.16.
  */
 @Service
 @Transactional (readOnly = true)
+@Slf4j
 public class UserService
 {
 	@Autowired
@@ -56,5 +58,15 @@ public class UserService
 		user = userRepository.save(user);
 		
 		return user;
+	}
+	
+	
+	
+	@Transactional
+	public void updateUserPassword(long userId, String password)
+	{
+		password = passwordEncoder.encode(password);
+		userRepository.updateUserPassword(userId, password);
+		log.debug("Password updated successfully for user id{}", userId);
 	}
 }
