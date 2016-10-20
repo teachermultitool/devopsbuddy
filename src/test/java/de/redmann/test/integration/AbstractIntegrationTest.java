@@ -15,7 +15,7 @@ import de.redmann.test.backend.persistence.repositories.RoleRepository;
 import de.redmann.test.backend.persistence.repositories.UserRepository;
 import de.redmann.test.enums.PlansEnum;
 import de.redmann.test.enums.RolesEnum;
-import de.redmann.test.utils.UsersUtils;
+import de.redmann.test.utils.UserUtils;
 
 /**
  * Created by redmann on 19.10.16.
@@ -39,7 +39,7 @@ public class AbstractIntegrationTest
 		Plan basicPlan = createBasicPlan(PlansEnum.BASIC);
 		planRepository.save(basicPlan);
 		
-		User basicUser = UsersUtils.createBasisUser(username, email);
+		User basicUser = UserUtils.createBasisUser(username, email);
 		basicUser.setPlan(basicPlan);
 		
 		Role basicRole = createBasicRole(RolesEnum.BASIC);

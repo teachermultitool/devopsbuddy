@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import de.redmann.test.backend.service.UserSecurityService;
+import de.redmann.test.web.controllers.ForgotMyPasswordController;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -40,11 +41,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
             "/contact/**",
             "/error/**/*",
             "/console/**",
-            "/actuator/**"
+            "/actuator/**",
+            ForgotMyPasswordController.FORGOT_PASSWORD_URL_MAPPING
     };
     //@formatter:on
 	
-	private static final String SALT = "kamsdaspüdfjiwsawelw#awp";
+	private static final String		SALT			= "kamsdaspüdfjiwsawelw#awp";
+	
+	
 	
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception

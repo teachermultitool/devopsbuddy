@@ -1,4 +1,4 @@
-package de.redmann.test.web.i18n;
+package de.redmann.test.backend.service;
 
 import java.util.Locale;
 

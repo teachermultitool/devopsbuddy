@@ -15,7 +15,7 @@ import de.redmann.test.backend.persistence.domain.backend.UserRole;
 import de.redmann.test.backend.service.UserService;
 import de.redmann.test.enums.PlansEnum;
 import de.redmann.test.enums.RolesEnum;
-import de.redmann.test.utils.UsersUtils;
+import de.redmann.test.utils.UserUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootApplication
@@ -45,7 +45,7 @@ public class Main implements CommandLineRunner
 	public void run(String... args) throws Exception
 	{
 		Set<UserRole> userRoleSet = new HashSet<>();
-		User basicUser = UsersUtils.createBasisUser(webmasterUsername, webmasterEmail);
+		User basicUser = UserUtils.createBasisUser(webmasterUsername, webmasterEmail);
 		basicUser.setPassword(webmasterPassword);
 		userRoleSet.add(new UserRole(basicUser, new Role(RolesEnum.ADMIN)));
 		
