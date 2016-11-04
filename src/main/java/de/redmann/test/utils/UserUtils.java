@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import de.redmann.test.backend.persistence.domain.backend.User;
 import de.redmann.test.web.controllers.ForgotMyPasswordController;
+import de.redmann.test.web.domain.frontend.BasicAccountPayload;
 
 /**
  * Created by redmann on 17.10.16.
@@ -52,5 +53,24 @@ public class UserUtils
                         token;
         //@formatter:on
 		return passwordResetUrl;
+	}
+	
+	
+	
+	public static <T extends BasicAccountPayload> User fromWebUserToDomainUser(T frontendPayload)
+	{
+		User user = new User();
+
+		user.setUsername(frontendPayload.getUsername());
+		user.setPassword(frontendPayload.getPassword());
+		user.setFirstName(frontendPayload.getFirstName());
+		user.setLastName(frontendPayload.getLastName());
+		user.setEmail(frontendPayload.getEmail());
+		user.setPhoneNumber(frontendPayload.getPhoneNumber());
+		user.setCountry(frontendPayload.getCountry());
+		user.setEnabled(true);
+		user.setDescription(frontendPayload.getDescription());
+
+		return user;
 	}
 }
