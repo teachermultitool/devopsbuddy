@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import de.redmann.test.backend.persistence.domain.backend.Plan;
 import de.redmann.test.backend.persistence.domain.backend.Role;
@@ -80,6 +81,7 @@ public class SignupController
 	
 	@RequestMapping (value = SIGNUP_URL_MAPPING, method = RequestMethod.POST)
 	public String signupPost(@RequestParam (value = "planId", required = true) int planId,
+			@RequestParam (name = "file", required = false) MultipartFile file,
 			@ModelAttribute (PAYLOAD_MODEL_KEY_NAME) @Valid ProAccountPayload payload, ModelMap model) throws IOException
 	{
 		if (planId != PlansEnum.BASIC.getId() && planId != PlansEnum.PRO.getId())
@@ -119,7 +121,21 @@ public class SignupController
 		log.debug("Transforming user payload into User domain object");
 		User user = UserUtils.fromWebUserToDomainUser(payload);
 		
-		log.debug("Retreiving plan from the database");
+		if (file != null && !file.isEmpty())
+		{
+			String profileImageUrl = null;
+			if (profileImageUrl != null)
+			{
+				user.setProfileImageUrl(profileImageUrl);
+			}
+			else
+			{
+				log.warn(
+						"There was a problem uploading the profile image to s3. The user's profile wiil be created without the image");
+			}
+		}
+		
+		log.debug("Retrieving plan from the database");
 		Plan selectedPlan = planService.findPlanById(planId);
 		
 		if (selectedPlan == null)
