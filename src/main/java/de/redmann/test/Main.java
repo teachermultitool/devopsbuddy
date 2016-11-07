@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import de.redmann.test.backend.persistence.domain.backend.Role;
 import de.redmann.test.backend.persistence.domain.backend.User;
 import de.redmann.test.backend.persistence.domain.backend.UserRole;
+import de.redmann.test.backend.service.PlanService;
 import de.redmann.test.backend.service.UserService;
 import de.redmann.test.enums.PlansEnum;
 import de.redmann.test.enums.RolesEnum;
@@ -22,15 +23,25 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Main implements CommandLineRunner
 {
+	private final UserService	userService;
+	
+	private final PlanService	planService;
+	
+	@Value ("${webmaster.username}")
+	private String				webmasterUsername;
+	@Value ("${webmaster.password}")
+	private String				webmasterPassword;
+	@Value ("${webmaster.email}")
+	private String				webmasterEmail;
+	
+	
+	
 	@Autowired
-	private UserService userService;
-
-    @Value("${webmaster.username}")
-    private String webmasterUsername;
-    @Value("${webmaster.password}")
-    private String webmasterPassword;
-    @Value("${webmaster.email}")
-    private String webmasterEmail;
+	public Main(PlanService planService, UserService userService)
+	{
+		this.planService = planService;
+		this.userService = userService;
+	}
 	
 	
 	
@@ -44,6 +55,10 @@ public class Main implements CommandLineRunner
 	@Override
 	public void run(String... args) throws Exception
 	{
+		log.info("Creating Basix and Pro plans in the database...");
+		planService.createPlan(PlansEnum.BASIC.getId());
+		planService.createPlan(PlansEnum.PRO.getId());
+		
 		Set<UserRole> userRoleSet = new HashSet<>();
 		User basicUser = UserUtils.createBasisUser(webmasterUsername, webmasterEmail);
 		basicUser.setPassword(webmasterPassword);

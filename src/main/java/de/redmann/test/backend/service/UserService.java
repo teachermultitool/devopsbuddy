@@ -62,6 +62,20 @@ public class UserService
 	
 	
 	
+	public User findByUserName(String username)
+	{
+		return userRepository.findByUsername(username);
+	}
+	
+	
+	
+	public User findByUserEmail(String email)
+	{
+		return userRepository.findByEmail(email);
+	}
+	
+	
+	
 	@Transactional
 	public void updateUserPassword(long userId, String password)
 	{
