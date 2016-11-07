@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import de.redmann.test.backend.service.UserSecurityService;
 import de.redmann.test.web.controllers.ForgotMyPasswordController;
+import de.redmann.test.web.controllers.SignupController;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -43,7 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
             "/console/**",
             "/actuator/**",
             ForgotMyPasswordController.FORGOT_PASSWORD_URL_MAPPING,
-            ForgotMyPasswordController.CHANGE_PASSWORD_PATH
+            ForgotMyPasswordController.CHANGE_PASSWORD_PATH,
+            SignupController.SIGNUP_URL_MAPPING
     };
     //@formatter:on
 	

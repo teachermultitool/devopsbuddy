@@ -19,7 +19,7 @@
                 <h4 th:text="#{index.h4.basic.text}"></h4>
             </div>
             <br/>
-            <a class="btn btn-primary btn-lg btn-block" th:text="#{index.basic.signup.button}"></a>
+            <a class="btn btn-primary btn-lg btn-block" th:href="@{/signup?planId=1}" th:text="#{index.basic.signup.button}"></a>
         </div>
         <div class="col-md-6">
             <div class="well">
@@ -27,7 +27,7 @@
                 <h4 th:text="#{index.h4.pro.text}"></h4>
             </div>
             <br/>
-            <a class="btn btn-primary btn-lg btn-block" th:text="#{index.pro.signup.button}"></a>
+            <a class="btn btn-primary btn-lg btn-block"  th:href="@{/signup?planId=2}" th:text="#{index.pro.signup.button}"></a>
         </div>
     </div>
     <!--<div class="starter-template">-->
