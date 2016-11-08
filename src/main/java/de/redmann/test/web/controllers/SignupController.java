@@ -2,7 +2,9 @@ package de.redmann.test.web.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -25,9 +27,11 @@ import de.redmann.test.backend.persistence.domain.backend.User;
 import de.redmann.test.backend.persistence.domain.backend.UserRole;
 import de.redmann.test.backend.service.PlanService;
 import de.redmann.test.backend.service.S3Service;
+import de.redmann.test.backend.service.StripeService;
 import de.redmann.test.backend.service.UserService;
 import de.redmann.test.enums.PlansEnum;
 import de.redmann.test.enums.RolesEnum;
+import de.redmann.test.utils.StripeUtils;
 import de.redmann.test.utils.UserUtils;
 import de.redmann.test.web.domain.frontend.BasicAccountPayload;
 import de.redmann.test.web.domain.frontend.ProAccountPayload;
@@ -57,15 +61,17 @@ public class SignupController
 	private final PlanService	planService;
 	private final UserService	userService;
 	private final S3Service		s3Service;
+	private final StripeService	stripeService;
 	
 	
 	
 	@Autowired
-	public SignupController(PlanService planService, UserService userService, S3Service s3Service)
+	public SignupController(PlanService planService, UserService userService, S3Service s3Service, StripeService stripeService)
 	{
 		this.planService = planService;
 		this.userService = userService;
 		this.s3Service = s3Service;
+		this.stripeService = stripeService;
 	}
 	
 	
@@ -173,6 +179,17 @@ public class SignupController
 				model.addAttribute(ERROR_MESSAGE_KEY, "One ofr more credit card details is null or empty.");
 				return SUBSCRIPTION_VIEW_NAME;
 			}
+			
+			Map<String, Object> stringTokenParams = StripeUtils.extractTokenParamsFromSignupPayload(payload);
+			Map<String, Object> customerParams = new HashMap<>();
+			
+			customerParams.put("description", "DevOps Buddy customer, Username: " + payload.getUsername());
+			customerParams.put("email", payload.getEmail());
+			customerParams.put("plan", selectedPlan.getId());
+			log.info("Subscribing the customer to plan: " + selectedPlan.getName());
+			String stripeCustomerId = stripeService.createCustomer(stringTokenParams, customerParams);
+			log.info("Username: " + payload.getUsername() + " has been subscribed to Stripe");
+			user.setStripeCustomerId(stripeCustomerId);
 			
 			registeredUser = userService.createUser(user, PlansEnum.PRO, roles);
 			log.debug(payload.toString());

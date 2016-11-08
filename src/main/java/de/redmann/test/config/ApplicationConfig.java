@@ -21,6 +21,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 @EnableJpaRepositories (basePackages = "de.redmann.test.backend.persistence.repositories")
 @EntityScan (basePackages = "de.redmann.test.backend.persistence.domain.backend")
 @PropertySource ("file:///${user.home}/.devopsbuddy/application-common.properties")
+@PropertySource ("file:///${user.home}/.devopsbuddy/stripe.properties")
 @EnableTransactionManagement
 public class ApplicationConfig
 {
