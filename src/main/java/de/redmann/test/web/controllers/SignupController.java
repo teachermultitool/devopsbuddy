@@ -23,6 +23,7 @@ import de.redmann.test.backend.persistence.domain.backend.Role;
 import de.redmann.test.backend.persistence.domain.backend.User;
 import de.redmann.test.backend.persistence.domain.backend.UserRole;
 import de.redmann.test.backend.service.PlanService;
+import de.redmann.test.backend.service.S3Service;
 import de.redmann.test.backend.service.UserService;
 import de.redmann.test.enums.PlansEnum;
 import de.redmann.test.enums.RolesEnum;
@@ -54,14 +55,16 @@ public class SignupController
 	
 	private final PlanService	planService;
 	private final UserService	userService;
+	private final S3Service		s3Service;
 	
 	
 	
 	@Autowired
-	public SignupController(PlanService planService, UserService userService)
+	public SignupController(PlanService planService, UserService userService, S3Service s3Service)
 	{
 		this.planService = planService;
 		this.userService = userService;
+		this.s3Service = s3Service;
 	}
 	
 	
@@ -123,7 +126,7 @@ public class SignupController
 		
 		if (file != null && !file.isEmpty())
 		{
-			String profileImageUrl = null;
+			String profileImageUrl = s3Service.storeProfileImage(file, payload.getUsername());
 			if (profileImageUrl != null)
 			{
 				user.setProfileImageUrl(profileImageUrl);
