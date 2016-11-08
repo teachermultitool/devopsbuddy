@@ -104,6 +104,39 @@
                                class="form-control"/>
                     </div>
 
+                    <div th:if="${#httpServletRequest.getParameter('planId')==#strings.toString(T(de.redmann.test.enums.PlansEnum).PRO.getId())}">
+                        <div class="form-group">
+                            <label for="cardNumber" th:text="#{signup.form.credit.card.number}"></label>
+                            <input type="text" id="cardNumber" th:field="*{cardNumber}" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="cardCode" th:text="#{signup.form.cvv.number}"></label>
+                            <input type="text" id="cardCode" th:field="*{cardCode}" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="cardMonth" th:text="#{signup.form.card.expiration}"></label>
+                            <select id="cardMonth" name="cardMonth">
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">Juöy</option>
+                            </select>
+                            <select id="cardYear" name="cardYear">
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                            </select>
+
+                        </div>
+                    </div>
+
                     <button type="submit" class="btn btn-primary" th:text="#{form.submit}"></button>
                 </form>
             </div>

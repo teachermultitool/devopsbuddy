@@ -191,10 +191,31 @@ function main() {
                         message: 'The value is not valid %s phone number'
                     }
                 }
+            },
+            cardNumber: {
+                validators: {
+                    notEmpty: {
+                        message: 'The credit card number is required'
+                    },
+                    creditCard: {
+                        message: 'The credit card number is not valid'
+                    }
+                }
+            },
+            cardCode: {
+                validators: {
+                    notEmpty: {
+                        message: 'The CVV is required'
+                    },
+                    cardCode: {
+                        creditCardField: 'cardNumber',
+                        message: 'The cCVV is not valid'
+                    }
+                }
             }
         }
     })
-        // Revalidate phone number when changing the country
+    // Revalidate phone number when changing the country
         .on('change', '[name="country"]', function (e) {
             $('#signupForm').formValidation('revalidateField', 'phoneNumber');
         })
