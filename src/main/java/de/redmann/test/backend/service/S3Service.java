@@ -16,6 +16,7 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 
+import de.redmann.test.excepions.S3Exception;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -82,41 +83,49 @@ public class S3Service
 	private String storeProfileImageToS3(Path resource, String username)
 	{
 		String resourceUrl = null;
-		
-		if (!Files.exists(resource))
+		try
 		{
-			log.error("The file {} does not exist. Throwing an exception", resource.toAbsolutePath().toString());
-			throw new IllegalArgumentException("The file " + resource.toAbsolutePath().toString() + " doesn't exist");
-		}
-		
-		String rootBucketUrl = ensureBucketExists(bucketName);
-		
-		if (rootBucketUrl == null)
-		{
-			log.error(
-					"The bucket {} does not exist and the application was not able to create it. The image won't be stored with the profile",
-					bucketName);
-		}
-		else
-		{
-			AccessControlList acl = new AccessControlList();
-			acl.grantPermission(GroupGrantee.AllUsers, Permission.Read);
-			
-			String key = username + "/" + PROFILE_PICTURE_FILE_NAME + "."
-					+ FilenameUtils.getExtension(resource.getFileName().toString());
-			
-			try
+			if (!Files.exists(resource))
 			{
-				s3Client.putObject(new PutObjectRequest(bucketName, key, resource.toFile()).withAccessControlList(acl));
-				resourceUrl = s3Client.getResourceUrl(bucketName, key);
+				log.error("The file {} does not exist. Throwing an exception", resource.toAbsolutePath().toString());
+				throw new S3Exception("The file " + resource.toAbsolutePath().toString() + " doesn't exist");
 			}
-			catch (AmazonClientException ace)
+			
+			String rootBucketUrl = ensureBucketExists(bucketName);
+			
+			if (rootBucketUrl == null)
 			{
 				log.error(
-						"A client exception occurred while trying to store the profile image {} on s3. The profile image won't be stored",
-						resource.toAbsolutePath().toString(), ace);
+						"The bucket {} does not exist and the application was not able to create it. The image won't be stored with the profile",
+						bucketName);
+			}
+			else
+			{
+				AccessControlList acl = new AccessControlList();
+				acl.grantPermission(GroupGrantee.AllUsers, Permission.Read);
+				
+				String key = username + "/" + PROFILE_PICTURE_FILE_NAME + "."
+						+ FilenameUtils.getExtension(resource.getFileName().toString());
+				
+				try
+				{
+					s3Client.putObject(new PutObjectRequest(bucketName, key, resource.toFile()).withAccessControlList(acl));
+					resourceUrl = s3Client.getResourceUrl(bucketName, key);
+				}
+				catch (AmazonClientException ace)
+				{
+					log.error(
+							"A client exception occurred while trying to store the profile image {} on s3. The profile image won't be stored",
+							resource.toAbsolutePath().toString(), ace);
+					throw new S3Exception(ace);
+				}
 			}
 		}
+		catch (Exception e)
+		{
+			throw new S3Exception(e);
+		}
+		
 		return resourceUrl;
 	}
 	
@@ -140,6 +149,7 @@ public class S3Service
 		{
 			log.error("A client exception occurerd while connecting toS3. Will not execute action for bucket: {}", bucketName,
 					ace);
+			throw new S3Exception(ace);
 		}
 		return bucketUrl;
 	}

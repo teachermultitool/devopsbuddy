@@ -1,0 +1,19 @@
+package de.redmann.test.excepions;
+
+/**
+ * Created by redmann on 09.11.16.
+ */
+public class S3Exception extends RuntimeException
+{
+	public S3Exception(Throwable e)
+	{
+		super(e);
+	}
+	
+	
+	
+	public S3Exception(String s)
+	{
+		super(s);
+	}
+}

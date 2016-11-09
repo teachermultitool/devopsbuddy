@@ -1,6 +1,8 @@
 package de.redmann.test.web.controllers;
 
 import java.io.IOException;
+import java.time.Clock;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,17 +10,16 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.util.StringUtils;
 
 import de.redmann.test.backend.persistence.domain.backend.Plan;
@@ -31,6 +32,8 @@ import de.redmann.test.backend.service.StripeService;
 import de.redmann.test.backend.service.UserService;
 import de.redmann.test.enums.PlansEnum;
 import de.redmann.test.enums.RolesEnum;
+import de.redmann.test.excepions.S3Exception;
+import de.redmann.test.excepions.StripeException;
 import de.redmann.test.utils.StripeUtils;
 import de.redmann.test.utils.UserUtils;
 import de.redmann.test.web.domain.frontend.BasicAccountPayload;
@@ -57,6 +60,8 @@ public class SignupController
 	public static final String	SIGNED_UP_MESSAGE_KEY	= "signedUp";
 	
 	public static final String	ERROR_MESSAGE_KEY		= "message";
+
+    public static final String	GENERIC_ERROR_VIEW_NAME	= "error/genericError";
 	
 	private final PlanService	planService;
 	private final UserService	userService;
@@ -202,6 +207,22 @@ public class SignupController
 		
 		model.addAttribute(SIGNED_UP_MESSAGE_KEY, "true");
 		return SUBSCRIPTION_VIEW_NAME;
+	}
+	
+	
+	
+	@ExceptionHandler ({ StripeException.class, S3Exception.class })
+	public ModelAndView signupException(HttpServletRequest request, Exception exception)
+	{
+		log.error("Request {} raised exception {}", request.getRequestURL(), exception);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("exception", exception);
+		mav.addObject("url", request.getRequestURL());
+		mav.addObject("timestamp", LocalDate.now(Clock.systemUTC()));
+		mav.setViewName(GENERIC_ERROR_VIEW_NAME);
+		
+		return mav;
 	}
 	
 	

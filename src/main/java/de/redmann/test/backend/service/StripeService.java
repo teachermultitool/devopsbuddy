@@ -47,7 +47,7 @@ public class StripeService
 		catch (APIConnectionException | InvalidRequestException | AuthenticationException | APIException | CardException e)
 		{
 			log.error("An exception while interacting with Stripe is occurred", e);
-			throw new de.redmann.test.excepions.StripeException();
+			throw new de.redmann.test.excepions.StripeException(e);
 		}
 		return stripeCustomerId;
 	}

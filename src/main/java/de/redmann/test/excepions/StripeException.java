@@ -5,4 +5,8 @@ package de.redmann.test.excepions;
  */
 public class StripeException extends RuntimeException
 {
+	public StripeException(Throwable e)
+	{
+		super(e);
+	}
 }

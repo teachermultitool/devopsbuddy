@@ -18,6 +18,7 @@ import com.stripe.model.Customer;
 import de.redmann.test.Main;
 import de.redmann.test.backend.service.StripeService;
 import de.redmann.test.enums.PlansEnum;
+import de.redmann.test.utils.StripeUtils;
 
 /**
  * Created by redmann on 08.11.16.
@@ -27,8 +28,8 @@ import de.redmann.test.enums.PlansEnum;
 public class StripeIntegrationTest
 {
 	public static final String	TEST_CC_NUMBER		= "4242424242424242";
-    public static final int	TEST_CC_EXP_MONTH	= 1;
-    public static final String	TEST_CC_CVC_NBR		= "314";
+	public static final int		TEST_CC_EXP_MONTH	= 1;
+	public static final String	TEST_CC_CVC_NBR		= "314";
 	@Autowired
 	private StripeService		stripeService;
 	
@@ -51,11 +52,11 @@ public class StripeIntegrationTest
 	{
 		HashMap<String, Object> tokenParams = new HashMap<>();
 		HashMap<String, Object> cardParams = new HashMap<>();
-		cardParams.put("number", TEST_CC_NUMBER);
-		cardParams.put("exp_month", TEST_CC_EXP_MONTH);
-		cardParams.put("exp_year", LocalDate.now(Clock.systemUTC()).getYear() + 1);
-		cardParams.put("cvc", TEST_CC_CVC_NBR);
-		tokenParams.put("card", cardParams);
+		cardParams.put(StripeUtils.STRIPE_CARD_NUMBER_KEY, TEST_CC_NUMBER);
+		cardParams.put(StripeUtils.STRIPE_EXP_MONTH_KEY, TEST_CC_EXP_MONTH);
+		cardParams.put(StripeUtils.STRIPE_EXP_YEAR_KEY, LocalDate.now(Clock.systemUTC()).getYear() + 1);
+		cardParams.put(StripeUtils.STRIPE_CVC_KEY, TEST_CC_CVC_NBR);
+		tokenParams.put(StripeUtils.STRIPE_CARD_KEY, cardParams);
 		
 		HashMap<String, Object> customerParams = new HashMap<>();
 		customerParams.put("description", "Customer for test@example.com");
